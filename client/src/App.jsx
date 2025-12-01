@@ -9,9 +9,9 @@ function App() {
       <BookProvider>
         <Home />
       </BookProvider>
-      <Toaster position="top-center" />
+      <Toaster position="top-center" richColors />
     </>
   );
 }
-
+ 
 export default App;

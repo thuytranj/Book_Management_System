@@ -2,10 +2,10 @@ import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import axios from "axios";
 import { useContext } from "react";
 import { BookContext } from "../context/BookProvider.jsx";
 import { toast } from "sonner";
+import api from "@/lib/axios.js";
 import {
   Select,
   SelectContent,
@@ -38,11 +38,11 @@ const FormBook = ({ onSuccess, updatedBook = null }) => {
   const onSubmit = async (data) => {
     try {
       const response = updatedBook
-        ? await axios.put(
-            `http://localhost:3000/api/books/${updatedBook.id}`,
+        ? await api.put(
+            `/books/${updatedBook.id}`,
             data
           )
-        : await axios.post("http://localhost:3000/api/books", data);
+        : await api.post("/books", data);
 
       toast.success(
         `Book "${data.title}" ${

@@ -2,7 +2,7 @@ import React from "react";
 import Header from "../components/Header.jsx";
 import Menu from "../components/Menu.jsx";
 import BookItem from "../components/BookItem.jsx";
-import axios from "axios";
+import api from "@/lib/axios.js";
 import { useEffect, useState, useMemo } from "react";
 import { useContext } from "react";
 import { BookContext } from "../context/BookProvider.jsx";
@@ -17,9 +17,9 @@ const Home = () => {
 
   async function fetchBooks(query="") {
     try {
-      const url = query ? `http://localhost:3000/api/books/search?str=${query}` : "http://localhost:3000/api/books";
+      const url = query ? `/books/search?str=${query}` : "/books";
 
-      const res = await axios.get(url);
+      const res = await api.get(url);
       const data = res.data;
 
       if (!query) {

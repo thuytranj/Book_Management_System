@@ -1,11 +1,11 @@
 import React, { use } from 'react'
 import { Button } from './ui/button'
-import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { Trash2 } from "lucide-react";
 import { SquarePen } from "lucide-react";
 import { toast } from "sonner";
 import FormBook from './FormBook.jsx'
+import api from '@/lib/axios.js';
 import {
   Dialog,
   DialogContent,
@@ -22,29 +22,25 @@ import {
 } from "@/components/ui/tooltip";
 
 const BookItem = ({ book, onSuccess }) => {
-  const [id, setId] = useState(null);
   const [bookDetails, setBookDetails] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
-  useEffect(() => {
-    async function handleDetailsClick() {
-      if (!id) return;
+   async function handleDetailsClick(id) {
+     if (!id) return;
 
-      try {
-        const res = await axios.get(`http://localhost:3000/api/books/${id}`);
-        setBookDetails(res.data);
-      } catch (error) {
-        console.error("Failed to fetch book details:", error);
-      }
-    }
+     try {
+       const res = await api.get(`/books/${id}`);
+       setBookDetails(res.data);
+     } catch (error) {
+       console.error("Failed to fetch book details:", error);
+     }
+   }
 
-    handleDetailsClick();
-   }, [id]);
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:3000/api/books/${book.id}`);
+      await api.delete(`/books/${book.id}`);
       setIsDeleting(true);
       toast.success(`Book "${book.title}" deleted successfully!`);
       onSuccess();
@@ -55,12 +51,12 @@ const BookItem = ({ book, onSuccess }) => {
 
 
   return (
-    <div className="flex w-full p-4 items-center rounded-md shadow-md bg-white gap-4">
+    <div className="flex w-full p-4 items-stretch rounded-md shadow-md bg-white gap-4">
       <div className="w-1/4 md:h-50 h-40 bg-gray-200 rounded-sm flex justify-center items-center text-gray-500">
         Image
       </div>
 
-      <div className="flex-1 flex flex-col gap-2">
+      <div className="flex-1 flex flex-col gap-2 justify-evenly">
         <div className="w-full flex justify-between">
           <div className="flex flex-col gap-0">
             <p className="font-semibold text-xl">{book.title}</p>
@@ -118,9 +114,6 @@ const BookItem = ({ book, onSuccess }) => {
                   </DialogHeader>
 
                   <DialogFooter className="flex justify-end gap-2">
-                    <Button variant="outline" onClick={() => {}}>
-                      Cancel
-                    </Button>
                     <Button
                       variant="destructive"
                       onClick={handleDelete}
@@ -144,7 +137,7 @@ const BookItem = ({ book, onSuccess }) => {
             <Button
               className="rounded-2xl px-7"
               variant="secondary"
-              onClick={() => setId(book.id)}
+              onClick={() => handleDetailsClick(book.id) }
             >
               Details
             </Button>
