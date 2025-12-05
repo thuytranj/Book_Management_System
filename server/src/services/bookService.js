@@ -52,7 +52,7 @@ class BookService {
           updatedData.publishedYear <= 0 ||
           updatedData.publishedYear > new Date().getFullYear()
         ) {
-          return { error: "Published Year must be a valid number" };
+          return { error: "Published year must be a valid number" };
         }
 
         const updatedBook = bookDAL.updateBook(id, updatedData);
